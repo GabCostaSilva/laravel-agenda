@@ -13,7 +13,7 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blue23print $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->string('zip_code')->unique();
             $table->string('street');

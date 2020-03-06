@@ -15,12 +15,12 @@ class CreatePhonesTable extends Migration
     {
         Schema::create('phones', function (Blueprint $table) {
             $table->id();
-            $table->integer('ddd');
+            $table->integer('area_code');
             $table->integer('number');
             $table->unsignedBigInteger('owner');
 
             $table->foreign('owner')->references('id')->on('people');
-            $table->index(['ddd', 'number']);
+            $table->index(['area_code', 'number']);
             $table->timestamps();
         });
     }
