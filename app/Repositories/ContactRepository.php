@@ -4,15 +4,15 @@
 namespace App\Repositories;
 
 
-use App\Models\Person;
+use App\Models\Contact;
 use Illuminate\Database\Eloquent\Model;
 
 
-class ContactRepository implements ContactRepositoryInterface
+class ContactRepository implements RepositoryInterface
 {
     private $model;
 
-    public function __construct(Person $model)
+    public function __construct(Contact $model)
     {
         $this->model = $model;
     }
@@ -47,6 +47,11 @@ class ContactRepository implements ContactRepositoryInterface
 
         return $contact->delete();
     }
+
+    public function findBy(string $field, string $value) {
+        return $this->model->where($field, $value);
+    }
+
 
     /**
      * @return Model

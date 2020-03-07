@@ -5,9 +5,9 @@ namespace Tests\Unit\Repositories;
 
 
 use App\Repositories\ContactRepository;
-use App\Models\Person;
-
+use App\Models\Contact;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Mockery\Exception;
 use Tests\TestCase;
 
 class ContactRepositoryTest extends TestCase
@@ -22,14 +22,15 @@ class ContactRepositoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->repository = new ContactRepository(new Person());
+        $this->repository = new ContactRepository(new Contact());
+//        $this->tearDown();
     }
 
     /**
      * @test
      */
     public function shouldListAllContacts() {
-        factory(Person::class, 3)->create();
+        factory(Contact::class, 3)->create();
 
         $contacts = $this->repository->all();
 
@@ -38,7 +39,7 @@ class ContactRepositoryTest extends TestCase
      * @test
      */
     public function shouldFindAContact() {
-        factory(Person::class, 1)->create();
+        factory(Contact::class, 1)->create();
 
         $contactFound = $this->repository->find(1);
 
@@ -48,7 +49,7 @@ class ContactRepositoryTest extends TestCase
      * @test
      */
     public function updateAContact() {
-        factory(Person::class, 1)->create();
+        factory(Contact::class, 1)->create();
 
         $data = ['first_name' => 'Louis'];
 
@@ -61,10 +62,22 @@ class ContactRepositoryTest extends TestCase
      * @test
      */
     public function shouldCreateAContact() {
-        $data = factory(Person::class)->make()->toArray();
+        $data = factory(Contact::class)->make()->toArray();
 
         $contact = $this->repository->create($data);
 
         $this->assertNotNull($contact);
     }
+
+    /**
+     * @test
+     */
+    public function shouldFindContactByFirstName() {
+        $contact = factory(Contact::class)->create();
+        $contactFound = $this->repository->findBy('first_name', $contact->first_name)->get()->first();
+
+        $this->assertEquals($contact->first_name, $contactFound->first_name);
+
+    }
+
 }

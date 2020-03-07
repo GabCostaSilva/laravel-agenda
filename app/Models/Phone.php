@@ -10,6 +10,6 @@ class Phone extends Model
     protected $fillable = ['area_code', 'number'];
 
     protected function owner() {
-        return $this->belongsTo('person', 'owner', 'id');
+        return $this->belongsTo('contacts', 'owner', 'id');
     }
 }

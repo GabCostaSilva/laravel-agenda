@@ -4,7 +4,7 @@
 namespace App\Repositories;
 
 
-interface ContactRepositoryInterface
+interface RepositoryInterface
 {
     public function all();
 

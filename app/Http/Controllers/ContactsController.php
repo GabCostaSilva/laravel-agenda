@@ -4,26 +4,27 @@
 namespace App\Http\Controllers;
 
 
-use App\Repositories\ContactRepository;
-use App\Repositories\ContactRepositoryInterface;
+use App\Repositories\RepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContactsController extends Controller
 {
     /**
-     * @param ContactRepositoryInterface $contactsRepository
+     * @param RepositoryInterface $contactsRepository
      * @return void
      */
     private $contactsRepository;
 
-    public function __construct(ContactRepositoryInterface $repository) {
+    public function __construct(RepositoryInterface $repository) {
         $this->contactsRepository = $repository;
     }
 
     /**
      * @api {post} /contacts Save contact
      * @apiName StoreContact
-     * @apiGroup Contacts
+     * @apiGroup Contact
      *
      * @apiExample {curl} Example usage:
      *    curl -i http://localhost/contacts
@@ -71,7 +72,7 @@ class ContactsController extends Controller
     public function store(Request $request){
         $data = $request->all();
         try {
-            $this->contactsRepository->create($data);
+            $contact = $this->contactsRepository->create($data);
 
             $address = [
                 'street' => $request['street'],
@@ -82,18 +83,28 @@ class ContactsController extends Controller
             ];
 
         } catch(\Exception $exception) {
-            return redirect('/')->with('error', 'Algo deu errado.');
+            return response()->json(['code' => 0, 'message' => 'Request not accepted', 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return redirect('/')->with('success', 'Contato criado com sucesso!');
+        return response()->json(['code' => 1, 'message' => 'Contato criado com sucesso.', 'data' => $contact]);
     }
 
-    public function show(Request $request){
+    public function index(Request $request){
         try {
+//            if($request->getQueryString()) {
+//                $field = $request->input();
+//                $value = $field[1];
+//                $contacts = $this->contactsRepository->findBy($field, $value);
+//            }
+
             $contacts = $this->contactsRepository->all();
         } catch(\Exception $exception) {
-            return view('contacts')->with('error', 'Algo deu errado.');
+            return response()->json(['code' => 0, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        return view('contacts', ['contacts' => $contacts]);
+        return response()->json(['code' => 1, 'message' => '', 'data' => $contacts]);
+    }
+
+    public function show(Request $request) {
+
     }
 }

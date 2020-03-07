@@ -19,7 +19,7 @@ class CreatePhonesTable extends Migration
             $table->integer('number');
             $table->unsignedBigInteger('owner');
 
-            $table->foreign('owner')->references('id')->on('people');
+            $table->foreign('owner')->references('id')->on('contacts');
             $table->index(['area_code', 'number']);
             $table->timestamps();
         });

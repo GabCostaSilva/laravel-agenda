@@ -23,7 +23,7 @@ class CreateAddressesTable extends Migration
             $table->string('neighborhood')->nullable();
             $table->unsignedBigInteger('owner');
 
-            $table->foreign('owner')->references('id')->on('people');
+            $table->foreign('owner')->references('id')->on('contacts');
             $table->timestamps();
         });
     }
