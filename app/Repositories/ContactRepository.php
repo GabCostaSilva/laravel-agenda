@@ -20,7 +20,7 @@ class ContactRepository implements RepositoryInterface
 
     public function all()
     {
-        return $this->model->all();
+        return $this->model->orderBy("name")->get();
     }
 
     public function create(array $data)

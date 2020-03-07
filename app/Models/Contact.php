@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Contact extends AbstractModel
 {
-    protected $fillable = ['first_name', 'last_name', 'email', 'birth', 'uuid'];
+    protected $fillable = ['name', 'email', 'birth', 'uuid'];
     protected $dates  = ['birth'];
     protected $table = 'contacts';
     protected $hidden = ['id'];

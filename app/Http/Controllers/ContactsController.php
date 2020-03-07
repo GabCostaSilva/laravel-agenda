@@ -29,8 +29,7 @@ class ContactsController extends Controller
      *    curl -i http://localhost/contacts
      *    body: {
      *       "customer" : {
-     *          "first_name": "JOSE",
-     *          "last_name": "MARIA",
+     *          "name": "JOSE MARIA",
      *          "email": "jose.maria@gmail.com",
      *          "birth": "1985-10-24",
      *          "address": "HENRI DUNANT",

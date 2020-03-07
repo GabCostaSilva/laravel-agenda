@@ -34,7 +34,7 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+                ['uuid', 'name', 'birth', 'email']
             ]
         ]);
     }
@@ -54,10 +54,11 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+                ['uuid', 'name', 'birth', 'email']
             ]
         ]);
     }
+
     /**
      * @test
      */
@@ -74,7 +75,7 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+                ['uuid', 'name', 'birth', 'email']
             ]
         ]);
     }
@@ -103,7 +104,7 @@ class ContactControllerTest extends TestCase
 
         $contact = factory(Contact::class, 1)->create()->get(0);
 
-        $data = ['last_name' => $this->faker->lastName];
+        $data = ['name' => $this->faker->name];
 
         $response = $this->call('PUT', "/api/contacts/$contact->uuid", $data);
 

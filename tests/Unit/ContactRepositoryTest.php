@@ -9,6 +9,8 @@ use App\Models\Contact;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Mockery\Exception;
 use Tests\TestCase;
+use Faker\Factory;
+
 
 class ContactRepositoryTest extends TestCase
 {
@@ -18,19 +20,21 @@ class ContactRepositoryTest extends TestCase
      * @var ContactRepository
      */
     private $repository;
+    private $faker;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->repository = new ContactRepository(new Contact());
-//        $this->tearDown();
+       $this->faker = Factory::create();
+
     }
 
     /**
      * @test
      */
     public function shouldListAllContacts() {
-        factory(Contact::class, 3)->create();
+        factory(Contact::class, 20)->create();
 
         $contacts = $this->repository->all();
 
@@ -38,7 +42,7 @@ class ContactRepositoryTest extends TestCase
     }/**
      * @test
      */
-    public function shouldFindAContact() {
+    public function shouldFindContact() {
         factory(Contact::class, 1)->create();
 
         $contactFound = $this->repository->findOne(1);
@@ -48,17 +52,19 @@ class ContactRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function updateAContact() {
+    public function shouldUpdateContact() {
         $contact = factory(Contact::class, 1)->create()->get(0);
 
-        $data = ['first_name' => 'Louis'];
+        $data = ['name' => $this->faker->name];
 
-        $contact = $this->repository->update($data, $contact->uuid);
+        $this->repository->update($data, $contact->uuid);
 
         $contactUpdated = $this->repository->findOne(1);
 
-        $this->assertEquals($contactUpdated->first_name, $data['first_name']);
-    }/**
+        $this->assertEquals($contactUpdated->name, $data['name']);
+    }
+
+    /**
      * @test
      */
     public function shouldCreateAContact() {
