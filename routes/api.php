@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +16,5 @@ Route::post('/contacts', 'ContactsController@store');
 Route::get('/contacts/search', 'ContactsController@search');
 Route::get('/contacts', 'ContactsController@index');
 Route::get('/contacts/{uuid}', 'ContactsController@show');
+Route::put('/contacts/{uuid}', 'ContactsController@update');
+Route::delete('/contacts/{uuid}', 'ContactsController@destroy');

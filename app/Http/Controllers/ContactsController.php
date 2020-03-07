@@ -82,7 +82,8 @@ class ContactsController extends Controller
             ];
 
         } catch(\Exception $exception) {
-            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return response()->json(['code' => 0, 'message' => 'Contato criado com sucesso.', 'data' => $contact]);
@@ -93,7 +94,8 @@ class ContactsController extends Controller
             $contacts = $this->contactsRepository->all();
 
         } catch(\Exception $exception) {
-            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response()->json(['code' => 0, 'message' => '', 'data' => $contacts]);
     }
@@ -104,16 +106,48 @@ class ContactsController extends Controller
             $input = $request->input('q');
             $results = $this->contactsRepository->find($input);
         }catch (\Exception $exception) {
-            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response()->json(['code' => 0, 'message' => '', 'data' => $results]);
     }
+
     public function show($uuid) {
         try {
             $results = $this->contactsRepository->findByUuid($uuid);
         }catch (\Exception $exception) {
-            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response()->json(['code' => 0, 'message' => '', 'data' => $results]);
+    }
+
+    public function destroy($uuid)
+    {
+        try {
+            $removedContact =$this->contactsRepository->delete($uuid);
+            if(!$removedContact) {
+                return response()->json(['code' =>0, 'message' => 'Contato não encontrado.', 'data' => '']);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        return response()->json(['code' => 0, 'message' => 'Contato removido com sucesso.', 'data' => $removedContact]);
+    }
+
+    public function update(Request $request, $uuid)
+    {
+        try {
+            $updatedContact = $this->contactsRepository->update($request->all(), $uuid);
+            if(!$updatedContact) {
+                return response()->json(['code' => 0, 'message' => 'Contato não encontrado.', 'data' => $updatedContact]);
+            }
+        } catch(\Exception $exception) {
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return response()->json(['code' => 0, 'message' => 'Contato atualizado com successo.', 'data' => $updatedContact]);
     }
 }

@@ -28,9 +28,9 @@ class ContactRepository implements RepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update(array $data, $id)
+    public function update(array $data, $uuid)
     {
-        $contact = $this->model->find($id);
+        $contact = $this->model->findByUuid($uuid);
 
         $contact->update($data);
 
@@ -40,13 +40,6 @@ class ContactRepository implements RepositoryInterface
     public function findOne($id)
     {
        return $this->model->find($id);
-    }
-
-    public function delete($id)
-    {
-        $contact = $this->model->find($id);
-
-        return $contact->delete();
     }
 
     public function find($value) {
@@ -59,6 +52,9 @@ class ContactRepository implements RepositoryInterface
         return $this->model->where('uuid', '=', $uuid)->get();
     }
 
+    public function delete(string $uuid) {
+        return $this->model->where('uuid', $uuid)->delete();
+    }
 
     /**
      * @return Model

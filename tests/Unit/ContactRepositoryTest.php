@@ -49,11 +49,11 @@ class ContactRepositoryTest extends TestCase
      * @test
      */
     public function updateAContact() {
-        factory(Contact::class, 1)->create();
+        $contact = factory(Contact::class, 1)->create()->get(0);
 
         $data = ['first_name' => 'Louis'];
 
-        $this->repository->update($data,1);
+        $contact = $this->repository->update($data, $contact->uuid);
 
         $contactUpdated = $this->repository->findOne(1);
 
@@ -88,4 +88,13 @@ class ContactRepositoryTest extends TestCase
         $this->assertEquals($contact->first_name, $contactFound->first_name);
     }
 
+    /**
+     * @test
+     */
+    public function shouldDeleteAContact() {
+        $contact = factory(Contact::class, 1)->create()->get(0);
+        $deleted = $this->repository->delete($contact->uuid);
+
+        $this->assertEquals($deleted, true);
+    }
 }

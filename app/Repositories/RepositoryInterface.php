@@ -3,7 +3,6 @@
 
 namespace App\Repositories;
 
-
 interface RepositoryInterface
 {
     public function all();
@@ -16,7 +15,7 @@ interface RepositoryInterface
 
     public function findByUuid(string $uuid);
 
-    public function update(array $data, $id);
+    public function update(array $data, $uuid);
 
-    public function delete($id);
+    public function delete(string $uuid);
 }
