@@ -25,6 +25,7 @@ class CreateAddressesTable extends Migration
 
             $table->foreign('owner')->references('id')->on('contacts');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Phone extends Model
+class Phone extends AbstractModel
 {
     protected $table = 'phones';
     protected $fillable = ['area_code', 'number'];

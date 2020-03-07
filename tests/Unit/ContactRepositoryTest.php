@@ -41,7 +41,7 @@ class ContactRepositoryTest extends TestCase
     public function shouldFindAContact() {
         factory(Contact::class, 1)->create();
 
-        $contactFound = $this->repository->find(1);
+        $contactFound = $this->repository->findOne(1);
 
         $this->assertNotNull($contactFound);
     }
@@ -55,7 +55,7 @@ class ContactRepositoryTest extends TestCase
 
         $this->repository->update($data,1);
 
-        $contactUpdated = $this->repository->find(1);
+        $contactUpdated = $this->repository->findOne(1);
 
         $this->assertEquals($contactUpdated->first_name, $data['first_name']);
     }/**
@@ -74,10 +74,18 @@ class ContactRepositoryTest extends TestCase
      */
     public function shouldFindContactByFirstName() {
         $contact = factory(Contact::class)->create();
-        $contactFound = $this->repository->findBy('first_name', $contact->first_name)->get()->first();
+        $contactFound = $this->repository->find($contact->first_name)->first();
 
         $this->assertEquals($contact->first_name, $contactFound->first_name);
+    }
+    /**
+     * @test
+     */
+    public function shouldFindContactByUuid() {
+        $contact = factory(Contact::class)->create();
+        $contactFound = $this->repository->findByUuid($contact->uuid)->first();
 
+        $this->assertEquals($contact->first_name, $contactFound->first_name);
     }
 
 }

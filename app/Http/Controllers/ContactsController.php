@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 
 use App\Repositories\RepositoryInterface;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -83,28 +82,38 @@ class ContactsController extends Controller
             ];
 
         } catch(\Exception $exception) {
-            return response()->json(['code' => 0, 'message' => 'Request not accepted', 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return response()->json(['code' => 1, 'message' => 'Contato criado com sucesso.', 'data' => $contact]);
+        return response()->json(['code' => 0, 'message' => 'Contato criado com sucesso.', 'data' => $contact]);
     }
 
-    public function index(Request $request){
+    public function index(){
         try {
-//            if($request->getQueryString()) {
-//                $field = $request->input();
-//                $value = $field[1];
-//                $contacts = $this->contactsRepository->findBy($field, $value);
-//            }
-
             $contacts = $this->contactsRepository->all();
+
         } catch(\Exception $exception) {
-            return response()->json(['code' => 0, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        return response()->json(['code' => 1, 'message' => '', 'data' => $contacts]);
+        return response()->json(['code' => 0, 'message' => '', 'data' => $contacts]);
     }
 
-    public function show(Request $request) {
-
+    public function search(Request $request)
+    {
+        try {
+            $input = $request->input('q');
+            $results = $this->contactsRepository->find($input);
+        }catch (\Exception $exception) {
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return response()->json(['code' => 0, 'message' => '', 'data' => $results]);
+    }
+    public function show($uuid) {
+        try {
+            $results = $this->contactsRepository->findByUuid($uuid);
+        }catch (\Exception $exception) {
+            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return response()->json(['code' => 0, 'message' => '', 'data' => $results]);
     }
 }

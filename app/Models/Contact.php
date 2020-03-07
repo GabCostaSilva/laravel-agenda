@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
+class Contact extends AbstractModel
 {
-    protected $fillable = ['first_name', 'last_name', 'email', 'birth'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'birth', 'uuid'];
     protected $dates  = ['birth'];
     protected $table = 'contacts';
+
     protected function phones() {
         return $this->hasMany('phones');
     }

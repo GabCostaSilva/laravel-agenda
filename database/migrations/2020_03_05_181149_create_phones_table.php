@@ -15,13 +15,21 @@ class CreatePhonesTable extends Migration
     {
         Schema::create('phones', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->integer('area_code');
             $table->integer('number');
             $table->unsignedBigInteger('owner');
 
-            $table->foreign('owner')->references('id')->on('contacts');
+            $table->foreign('owner')
+                ->references('id')
+                ->on('contacts')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->index(['area_code', 'number']);
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

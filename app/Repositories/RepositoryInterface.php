@@ -10,7 +10,11 @@ interface RepositoryInterface
 
     public function create(array $data);
 
-    public function find($id);
+    public function find($value);
+
+    public function findOne($id);
+
+    public function findByUuid(string $uuid);
 
     public function update(array $data, $id);
 

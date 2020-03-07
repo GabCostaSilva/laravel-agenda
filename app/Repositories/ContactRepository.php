@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Models\Contact;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -36,7 +37,7 @@ class ContactRepository implements RepositoryInterface
         return $contact->save();
     }
 
-    public function find($id)
+    public function findOne($id)
     {
        return $this->model->find($id);
     }
@@ -48,8 +49,14 @@ class ContactRepository implements RepositoryInterface
         return $contact->delete();
     }
 
-    public function findBy(string $field, string $value) {
-        return $this->model->where($field, $value);
+    public function find($value) {
+        return $this->model
+            ->where('first_name', 'LIKE', "%$value%")
+            ->orWhere('last_name', 'LIKE', "%$value%")->get();
+    }
+
+    public function findByUuid(string $uuid){
+        return $this->model->where('uuid', '=', $uuid)->get();
     }
 
 

@@ -8,6 +8,7 @@ $factory->define(Contact::class, function(Faker $faker){
         'first_name' => $faker->name,
         'last_name' => $faker->name,
         'email' => $faker->email,
-        'birth' => $faker->date()
+        'birth' => $faker->date(),
+        'uuid' => $faker->uuid
     ];
 });
