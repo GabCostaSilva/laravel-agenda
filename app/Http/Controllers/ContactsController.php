@@ -3,7 +3,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,12 +21,24 @@ class ContactsController extends AbstractController
      *          "last_name": "MARIA",
      *          "email": "jose.maria@gmail.com",
      *          "birth": "1985-10-24",
-     *          "address": "HENRI DUNANT",
+     *          "street": "HENRI DUNANT",
      *          "post_code": "04709110",
      *          "number": "742",
      *          "city": "SAO PAULO",
      *          "state": "SP",
-     *          "neighborhood": "SANTO AMARO",
+     *          "country": "Brazil",
+     *          "phones": [
+     *              {
+     *                  "area_code": "11",
+     *                  "number": "984509696",
+     *                  "primary": true
+     *              },
+     *              {
+     *                  "area_code": "11"
+     *                  "number": "26205383",
+     *                  "primary": false
+     *              }
+     *          ]
      *       }
      *    }
      *
@@ -41,39 +52,50 @@ class ContactsController extends AbstractController
      *                       "name": "José Maria",
      *                       "email": "camilo.goncalves@hotmail.com",
      *                       "birth": "1985-10-24T00:00:00.000000Z",
-     *                       "address": "Travessa Meireles",
-     *                       "postcode": "56799-429",
-     *                       "number": "1",
-     *                       "city": "São Paulo",
+     *                       "street": "HENRI DUNANT",
+     *                       "post_code": "04709110",
+     *                       "number": "742",
+     *                       "city": "SAO PAULO",
      *                       "state": "SP",
-     *                       "neighborhood": "Vila Madalena",
+     *                       "country": "Brazil",
+     *                       "phones": [
+     *                           {
+     *                               "area_code": "11",
+     *                               "number": "984509696",
+     *                               "primary": true
+     *                           },
+     *                           {
+     *                               "area_code": "11"
+     *                               "number": "26205383",
+     *                               "primary": false
+     *                           }
+     *                        ]
      *                       "created_at": "2019-12-05 14:56:38",
      *                       "updated_at": "2019-12-05 14:56:39",
      *                       "deleted_at": null
      *                }
-     *            }
+     *         }
      *
      */
     public function store(Request $request){
         $data = $request->all();
         try {
-
             $contact = $this->contactsRepository->create($data);
 
-            $address = [
-                'street' => $request['street'],
-                'neighborhood' => $request['neighborhood'],
-                'city' => $request['city'],
-                'state' => $request['state'],
-                'country' => $request['country']
-            ];
+            foreach ($data['phones'][0] as $phone) {
+                $contact->phones()->save($phone);
+            }
 
         } catch(\Exception $exception) {
             return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
                 Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return response()->json(['code' => 0, 'message' => 'Contato criado com sucesso.', 'data' => $contact]);
+        return response()->json([
+            'code' => 0,
+            'message' => 'Contato criado com sucesso.',
+            'data' => $contact
+        ]);
     }
 
     public function index(){
@@ -115,9 +137,10 @@ class ContactsController extends AbstractController
         try {
             $removedContact =$this->contactsRepository->delete($uuid);
             if(!$removedContact) {
-                return response()->json(['code' =>0, 'message' => 'Contato não encontrado.', 'data' => '']);
+                return response()->json(['code' => 0, 'message' => 'Contato não encontrado.', 'data' => '']);
             }
         } catch (\Exception $exception) {
+
             return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
                 Response::HTTP_UNPROCESSABLE_ENTITY);
         }

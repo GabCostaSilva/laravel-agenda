@@ -19,7 +19,13 @@ class CreateContactsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->date('birth');
-            $table->string('email');
+            $table->string('email')->unique();
+            $table->string('street');
+            $table->string('state');
+            $table->string('city');
+            $table->string('country');
+            $table->string('number');
+            $table->string('post_code');
 
             $table->index(['first_name', 'last_name']);
             $table->timestamps();

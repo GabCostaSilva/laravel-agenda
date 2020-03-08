@@ -5,6 +5,7 @@ namespace Tests\Unit\Contacts;
 
 
 use App\Models\Contact;
+use App\Models\Phone;
 use Tests\TestCase;
 
 class ContactControllerTest extends TestCase
@@ -14,6 +15,26 @@ class ContactControllerTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @test
+     */
+    public function shouldCreateContact() {
+        $contact = factory(Contact::class)->make();
+
+        $phones = factory(Phone::class, 2)->make();
+
+        $contact['phones'] = [$phones];
+
+        $response = $this->call('POST', '/api/contacts', $contact->toArray());
+
+        $response->assertJsonStructure([
+            'code',
+            'message',
+            'data' => [
+                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+            ]
+        ]);
+    }
     /**
      * @test
      */

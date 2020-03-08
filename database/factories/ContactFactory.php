@@ -9,6 +9,12 @@ $factory->define(Contact::class, function(Faker $faker){
         'last_name' => $faker->name,
         'email' => $faker->email,
         'birth' => $faker->date(),
+        'street' => $faker->streetName,
+        'state' => $faker->state,
+        'number' => $faker->randomNumber(),
+        'post_code' => $faker->postcode,
+        'city' => $faker->city,
+        'country' => $faker->country,
         'uuid' => $faker->uuid
     ];
 });

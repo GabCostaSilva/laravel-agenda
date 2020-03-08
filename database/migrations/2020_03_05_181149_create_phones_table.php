@@ -19,9 +19,9 @@ class CreatePhonesTable extends Migration
             $table->integer('area_code');
             $table->string('number');
             $table->boolean('primary')->default(false);
-            $table->unsignedBigInteger('owner');
+            $table->unsignedBigInteger('contact_id');
 
-            $table->foreign('owner')
+            $table->foreign('contact_id')
                 ->references('id')
                 ->on('contacts')
                 ->onDelete('cascade')

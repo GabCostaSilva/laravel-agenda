@@ -2,13 +2,33 @@
 
 namespace App\Models;
 
-class Contact extends AbstractModel
-{
-    protected $fillable = ['first_name', 'last_name', 'email', 'birth', 'uuid'];
-    protected $dates  = ['birth'];
-    protected $table = 'contacts';
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use YourAppRocks\EloquentUuid\Traits\HasUuid;
 
-    protected function phones() {
-        return $this->hasMany('phones');
+class Contact extends Model
+{
+    use HasUuId;
+    use SoftDeletes;
+
+    protected $hidden = ['id'];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'birth',
+        'street',
+        'number',
+        'state',
+        'country',
+        'city',
+        'post_code',
+        'uuid'
+    ];
+
+    protected $dates  = ['birth'];
+
+    public function phones() {
+        return $this->hasMany(Phone::class);
     }
 }
