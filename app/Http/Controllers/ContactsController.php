@@ -4,22 +4,11 @@
 namespace App\Http\Controllers;
 
 
-use App\Repositories\RepositoryInterface;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ContactsController extends Controller
+class ContactsController extends AbstractController
 {
-    /**
-     * @param RepositoryInterface $contactsRepository
-     * @return void
-     */
-    private $contactsRepository;
-
-    public function __construct(RepositoryInterface $repository) {
-        $this->contactsRepository = $repository;
-    }
-
     /**
      * @api {post} /contacts Save contact
      * @apiName StoreContact
@@ -29,7 +18,8 @@ class ContactsController extends Controller
      *    curl -i http://localhost/contacts
      *    body: {
      *       "customer" : {
-     *          "name": "JOSE MARIA",
+     *          "first_name": "JOSE",
+     *          "last_name": "MARIA",
      *          "email": "jose.maria@gmail.com",
      *          "birth": "1985-10-24",
      *          "address": "HENRI DUNANT",
@@ -47,12 +37,10 @@ class ContactsController extends Controller
      *               "type": "success",
      *               "message": "Contato criado com sucesso!",
      *               "data": {
-     *                   "customer": {
-     *                       "id": 1,
      *                       "uuid": "6dffce4e-3e01-41d0-aab8-81ad488cad34",
      *                       "name": "José Maria",
      *                       "email": "camilo.goncalves@hotmail.com",
-     *                       "birth": "2000-12-05 14:56:38",
+     *                       "birth": "1985-10-24T00:00:00.000000Z",
      *                       "address": "Travessa Meireles",
      *                       "postcode": "56799-429",
      *                       "number": "1",
@@ -62,7 +50,6 @@ class ContactsController extends Controller
      *                       "created_at": "2019-12-05 14:56:38",
      *                       "updated_at": "2019-12-05 14:56:39",
      *                       "deleted_at": null
-     *                    }
      *                }
      *            }
      *
@@ -70,6 +57,7 @@ class ContactsController extends Controller
     public function store(Request $request){
         $data = $request->all();
         try {
+
             $contact = $this->contactsRepository->create($data);
 
             $address = [
@@ -111,7 +99,8 @@ class ContactsController extends Controller
         return response()->json(['code' => 0, 'message' => '', 'data' => $results]);
     }
 
-    public function show($uuid) {
+    public function show($uuid)
+    {
         try {
             $results = $this->contactsRepository->findByUuid($uuid);
         }catch (\Exception $exception) {

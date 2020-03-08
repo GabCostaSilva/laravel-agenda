@@ -5,11 +5,9 @@ namespace App\Repositories;
 
 
 use App\Models\Contact;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-
-class ContactRepository implements RepositoryInterface
+class ContactRepository
 {
     private $model;
 
@@ -20,7 +18,10 @@ class ContactRepository implements RepositoryInterface
 
     public function all()
     {
-        return $this->model->orderBy("name")->get();
+        return $this->model
+            ->orderByRaw(
+                "CAST(first_name AS UNSIGNED), first_name, CAST(last_name AS UNSIGNED), last_name"
+            )->get();
     }
 
     public function create(array $data)
@@ -49,7 +50,7 @@ class ContactRepository implements RepositoryInterface
     }
 
     public function findByUuid(string $uuid){
-        return $this->model->where('uuid', '=', $uuid)->get();
+        return $this->model->where('uuid', $uuid)->get();
     }
 
     public function delete(string $uuid) {

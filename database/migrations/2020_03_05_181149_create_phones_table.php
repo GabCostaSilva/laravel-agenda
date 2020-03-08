@@ -17,7 +17,8 @@ class CreatePhonesTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->integer('area_code');
-            $table->integer('number');
+            $table->string('number');
+            $table->boolean('primary')->default(false);
             $table->unsignedBigInteger('owner');
 
             $table->foreign('owner')

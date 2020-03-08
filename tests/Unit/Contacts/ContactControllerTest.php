@@ -1,21 +1,17 @@
 <?php
 
 
-namespace Tests\Unit;
+namespace Tests\Unit\Contacts;
 
 
 use App\Models\Contact;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
-use Faker\Factory;
+
 class ContactControllerTest extends TestCase
 {
-    use DatabaseMigrations;
-    private $faker;
     protected function setUp(): void
     {
         parent::setUp();
-        $this->faker = Factory::create();
     }
 
     /**
@@ -34,7 +30,7 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'name', 'birth', 'email']
+                ['uuid', 'first_name', 'last_name', 'birth', 'email']
             ]
         ]);
     }
@@ -54,11 +50,10 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'name', 'birth', 'email']
+                ['uuid', 'first_name', 'last_name', 'birth', 'email']
             ]
         ]);
     }
-
     /**
      * @test
      */
@@ -75,14 +70,14 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'name', 'birth', 'email']
+                ['uuid', 'first_name', 'last_name', 'birth', 'email']
             ]
         ]);
     }
     /**
      * @test
      */
-    public function shouldDeleteAContact() {
+    public function shouldDeleteContact() {
         $this->withoutMiddleware();
 
         $contact = factory(Contact::class, 1)->create()->get(0);
@@ -104,7 +99,7 @@ class ContactControllerTest extends TestCase
 
         $contact = factory(Contact::class, 1)->create()->get(0);
 
-        $data = ['name' => $this->faker->name];
+        $data = ['last_name' => $this->faker->lastName];
 
         $response = $this->call('PUT', "/api/contacts/$contact->uuid", $data);
 

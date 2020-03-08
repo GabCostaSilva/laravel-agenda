@@ -12,4 +12,6 @@ abstract class AbstractModel extends Model
 {
     use HasUuId;
     use SoftDeletes;
+
+    protected $hidden = ['id'];
 }

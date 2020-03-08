@@ -1,33 +1,26 @@
 <?php
 
 
-namespace Tests\Unit\Repositories;
+namespace Tests\Unit\Repositories\Contacts;
 
 
 use App\Repositories\ContactRepository;
 use App\Models\Contact;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Mockery\Exception;
 use Tests\TestCase;
-use Faker\Factory;
 
 
 class ContactRepositoryTest extends TestCase
 {
-    use DatabaseMigrations;
 
     /**
      * @var ContactRepository
      */
     private $repository;
-    private $faker;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->repository = new ContactRepository(new Contact());
-       $this->faker = Factory::create();
-
     }
 
     /**
@@ -55,13 +48,13 @@ class ContactRepositoryTest extends TestCase
     public function shouldUpdateContact() {
         $contact = factory(Contact::class, 1)->create()->get(0);
 
-        $data = ['name' => $this->faker->name];
+        $data = ['first_name' => $this->faker->name];
 
-        $this->repository->update($data, $contact->uuid);
+        $contact = $this->repository->update($data, $contact->uuid);
 
         $contactUpdated = $this->repository->findOne(1);
 
-        $this->assertEquals($contactUpdated->name, $data['name']);
+        $this->assertEquals($contactUpdated->first_name, $data['first_name']);
     }
 
     /**

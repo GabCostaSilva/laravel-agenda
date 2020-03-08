@@ -16,11 +16,12 @@ class CreateContactsTable extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->date('birth');
             $table->string('email');
 
-            $table->index('name');
+            $table->index(['first_name', 'last_name']);
             $table->timestamps();
             $table->softDeletes();
         });
