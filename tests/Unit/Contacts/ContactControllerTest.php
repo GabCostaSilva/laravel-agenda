@@ -31,7 +31,7 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+               'uuid', 'first_name', 'last_name', 'birth', 'email'
             ]
         ]);
     }
