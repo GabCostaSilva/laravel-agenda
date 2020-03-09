@@ -64,6 +64,8 @@ class ContactControllerTest extends TestCase
 
         $contact = factory(Contact::class, 3)->create()->get(0);
 
+        factory(Phone::class)->create();
+
         $response = $this->call('GET', "/api/contacts/search?q=$contact->last_name");
         $response->assertStatus(200);
 

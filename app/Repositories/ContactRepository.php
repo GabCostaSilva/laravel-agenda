@@ -45,8 +45,12 @@ class ContactRepository
 
     public function find($value) {
         return $this->model
-            ->where('first_name', 'LIKE', "%$value%")
-            ->orWhere('last_name', 'LIKE', "%$value%")->get();
+            ->join('phones', 'phones.contact_id', '=', 'contacts.id')
+            ->where('contacts.first_name', 'LIKE', "%$value%")
+            ->orWhere('contacts.last_name', 'LIKE', "%$value%")
+            ->orWhere('phones.area_code', 'LIKE', "%$value%")
+            ->orWhere('phones.number', 'LIKE', "%$value%")
+            ->get();
     }
 
     public function findByUuid(string $uuid){

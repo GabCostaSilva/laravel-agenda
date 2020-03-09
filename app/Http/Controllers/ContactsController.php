@@ -135,7 +135,7 @@ class ContactsController extends AbstractController
     public function destroy($uuid)
     {
         try {
-            $removedContact =$this->contactsRepository->delete($uuid);
+            $removedContact = $this->contactsRepository->delete($uuid);
             if(!$removedContact) {
                 return response()->json(['code' => 0, 'message' => 'Contato não encontrado.', 'data' => '']);
             }

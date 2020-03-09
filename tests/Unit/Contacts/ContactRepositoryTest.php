@@ -4,6 +4,7 @@
 namespace Tests\Unit\Repositories\Contacts;
 
 
+use App\Models\Phone;
 use App\Repositories\ContactRepository;
 use App\Models\Contact;
 use Tests\TestCase;
@@ -71,9 +72,34 @@ class ContactRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindContactByFirstName() {
+    public function shouldFindContactsByFirstName() {
         $contact = factory(Contact::class)->create();
+        factory(Phone::class)->create();
         $contactFound = $this->repository->find($contact->first_name)->first();
+
+        $this->assertEquals($contact->first_name, $contactFound->first_name);
+    }
+    /**
+     * @test
+     */
+    public function shouldFindContactsByPhoneNumber() {
+        $contact = factory(Contact::class)->create();
+
+        $phone = factory(Phone::class)->create();
+
+        $contactFound = $this->repository->find($phone->number)->first();
+
+        $this->assertEquals($contact->first_name, $contactFound->first_name);
+    }
+    /**
+     * @test
+     */
+    public function shouldFindContactsByAreaCode() {
+        $contact = factory(Contact::class)->create();
+
+        $phone = factory(Phone::class)->create();
+
+        $contactFound = $this->repository->find($phone->area_code)->first();
 
         $this->assertEquals($contact->first_name, $contactFound->first_name);
     }
