@@ -1,0 +1,10 @@
+fieldset {
+  margin-top: 20px;
+}
+
+.contact-box {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  padding: 8px 4px;
+}
