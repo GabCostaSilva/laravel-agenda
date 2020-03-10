@@ -11,6 +11,5 @@ $factory->define(Phone::class, function(Faker $faker){
         'area_code' => $faker->randomNumber(2),
         'number' => $faker->randomNumber(9),
         'contact_id' => $contact->id,
-        'primary' => true,
     ];
 });

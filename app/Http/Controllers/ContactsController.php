@@ -85,8 +85,9 @@ class ContactsController extends AbstractController
         try {
             $contact = $this->contactsRepository->create($data);
 
-            foreach ($data['phones'][0] as $phone) {
-                $contact->phones()->save($phone);
+            foreach ($data['phones'] as $phone) {
+                $phone['contact_id'] = $contact->id;
+                $this->phonesRepository->create($phone);
             }
 
         } catch(\Exception $exception) {
@@ -125,6 +126,7 @@ class ContactsController extends AbstractController
     {
         try {
             $input = $request->input('q');
+
             $results = $this->contactsRepository->find($input);
         }catch (\Exception $exception) {
             return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
@@ -219,12 +221,10 @@ class ContactsController extends AbstractController
      *                           {
      *                               "area_code": "67",
      *                               "number": "984509696",
-     *                               "primary": true
      *                           },
      *                           {
      *                               "area_code": "11"
      *                               "number": "26205383",
-     *                               "primary": false
      *                           }
      *                        ]
      *                       "created_at": "2019-12-05 14:56:38",
@@ -237,19 +237,24 @@ class ContactsController extends AbstractController
     public function update(Request $request, $uuid)
     {
         try {
+
             $updatedContact = $this->contactsRepository->update($request->all(), $uuid);
-            $this->contactsRepository->findByUuid($uuid);
+            $contact = $this->contactsRepository->findByUuid($uuid)->first();
+            $phonesData = $request->input('phones');
 
             if(!$updatedContact) {
                 return response()->json(['code' => 0, 'message' => 'Contato não encontrado.', 'data' => $updatedContact]);
             }
 
-            $phonesData = $request->input('phones');
-
-            if($phonesData) {
-                foreach ($phonesData as $phoneData) {
+            foreach ($phonesData as $phoneData) {
+                if( is_array($phoneData) && array_key_exists('uuid',$phoneData)) {
                     $phoneToUpdate = $this->phonesRepository->findBy('uuid', $phoneData['uuid'])->first();
-                    $this->phonesRepository->update($phoneData, $phoneToUpdate->id);
+                    if($phoneToUpdate->toArray()) {
+                        $this->phonesRepository->update($phoneToUpdate->toArray(), $phoneToUpdate->id);
+                    }
+                } else {
+                    $phone['owner_id'] = $contact->id;
+                    $phone = $this->phonesRepository->create($phoneData);
                 }
             }
         } catch(\Exception $exception) {
@@ -257,16 +262,5 @@ class ContactsController extends AbstractController
                 Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response()->json(['code' => 0, 'message' => 'Contato atualizado com successo.', 'data' => $updatedContact]);
-    }
-
-    public function getBirthdays() {
-        try {
-            $currentMonth = Carbon::now()->month;
-            $birthdays = $this->contactsRepository->findBirthdays($currentMonth);
-        }catch(\Exception $exception) {
-            return response()->json(['code' => 1, 'message' => $exception->getMessage(), 'data' => ''],
-                Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-        return response()->json(['code' => 0, 'message' => 'Aniversariantes encontrados com sucesso.', 'data' => $birthdays]);
     }
 }

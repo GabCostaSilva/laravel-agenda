@@ -18,9 +18,9 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/contacts', 'ContactsController@index');
     Route::get('/contacts/birthdays', 'ContactsController@getBirthdays');
     Route::get('/contacts/{uuid}', 'ContactsController@show');
-    Route::put('/contacts/{uuid}', 'ContactsController@update');
+    Route::post('/contacts/{uuid}', 'ContactsController@update');
     Route::delete('/contacts/{uuid}', 'ContactsController@destroy');
 
-    Route::delete('/phones', 'PhonesController@destroy');
+    Route::post('/phones/{uuid}', 'PhonesController@destroy');
 
 });

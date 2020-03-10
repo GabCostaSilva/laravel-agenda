@@ -13,7 +13,7 @@ class Phone extends Model
 
     protected $hidden = ['id'];
     protected $table = 'phones';
-    protected $fillable = ['area_code', 'number', 'primary', 'contact_id'];
+    protected $fillable = ['area_code', 'number', 'contact_id'];
 
     protected function contact() {
         return $this->belongsTo(Contact::class, 'contact_id', 'id');

@@ -44,7 +44,18 @@ class PhoneRepositoryTest extends TestCase
 
         $this->assertEquals($phoneUpdated->number, $data['number']);
     }
+    /**
+     * @test
+     */
+    public function shouldUpdateOrCreatePhone() {
+        $phone = factory(Phone::class)->make()->toArray();
 
+        $this->repository->updateOrCreate($phone);
+
+        $phoneUpdated = $this->repository->findOne(1);
+
+        $this->assertArrayHasKey('id', $phoneUpdated);
+    }
     /**
      * @test
      */

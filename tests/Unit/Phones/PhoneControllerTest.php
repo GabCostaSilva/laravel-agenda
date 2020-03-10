@@ -19,9 +19,10 @@ class PhoneControllerTest extends TestCase
      */
     public function shouldDeleteAPhone() {
         $this->withoutMiddleware();
-        $phones = factory(Phone::class, 3)->create()->toArray();
 
-        $response = $this->call('DELETE', "/api/phones", $phones);
+        $phone = factory(Phone::class)->create();
+
+        $response = $this->call('POST', "/api/phones/". $phone->uuid);
 
         $response->assertStatus(200);
 

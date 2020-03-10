@@ -46,12 +46,15 @@ class ContactRepository
     }
 
     public function find($value) {
-        return $this->model
+        return $this->model->distinct()->select(DB::raw('first_name,last_name, contacts.uuid, phones.number, phones.area_code, email'))->distinct()
             ->join('phones', 'phones.contact_id', '=', 'contacts.id')
             ->where('contacts.first_name', 'LIKE', "%$value%")
             ->orWhere('contacts.last_name', 'LIKE', "%$value%")
             ->orWhere('phones.area_code', 'LIKE', "%$value%")
             ->orWhere('phones.number', 'LIKE', "%$value%")
+            ->groupBy('contacts.uuid')
+            ->groupBy('phones.number')
+            ->groupBy('phones.area_code')
             ->get();
     }
 

@@ -29,6 +29,11 @@ class PhoneRepository
         return $phone->save();
     }
 
+    public function updateOrCreate(array $data)
+    {
+        return $this->getModel()->updateOrCreate($data);
+    }
+
     public function findOne($id) {
         return $this->model->find($id);
     }
