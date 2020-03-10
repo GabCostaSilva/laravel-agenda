@@ -33,6 +33,10 @@ class PhoneRepository
         return $this->model->find($id);
     }
 
+    public function findBy(string $field, $value) {
+        return $this->model->where($field, $value)->get();
+    }
+
     public function delete(string $id) {
         return $this->model->where('id', $id)->delete();
     }

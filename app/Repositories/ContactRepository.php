@@ -5,7 +5,9 @@ namespace App\Repositories;
 
 
 use App\Models\Contact;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ContactRepository
 {
@@ -40,7 +42,7 @@ class ContactRepository
 
     public function findOne($id)
     {
-       return $this->model->find($id);
+        return $this->model->find($id);
     }
 
     public function find($value) {
@@ -55,6 +57,10 @@ class ContactRepository
 
     public function findByUuid(string $uuid){
         return $this->model->where('uuid', $uuid)->get();
+    }
+
+    public function findBirthdays($month) {
+        return  $this->model->whereMonth('birth', $month)->get();
     }
 
     public function delete(string $uuid) {

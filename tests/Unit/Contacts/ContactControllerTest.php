@@ -6,6 +6,7 @@ namespace Tests\Unit\Contacts;
 
 use App\Models\Contact;
 use App\Models\Phone;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class ContactControllerTest extends TestCase
@@ -19,6 +20,7 @@ class ContactControllerTest extends TestCase
      * @test
      */
     public function shouldCreateContact() {
+        $this->withoutMiddleware();
         $contact = factory(Contact::class)->make();
 
         $phones = factory(Phone::class, 2)->make();
@@ -41,7 +43,11 @@ class ContactControllerTest extends TestCase
     public function shouldGetContacts() {
         $this->withoutMiddleware();
 
-        factory(Contact::class, 3)->create();
+        $contact = factory(Contact::class, 3)->create();
+
+        foreach ($contact as $contact) {
+            factory(Phone::class, 3)->create(['contact_id' => $contact->id]);
+        }
 
         $response = $this->call('GET', '/api/contacts');
 
@@ -51,7 +57,8 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+                'contacts',
+                'birthdays'
             ]
         ]);
     }
@@ -93,9 +100,22 @@ class ContactControllerTest extends TestCase
             'code',
             'message',
             'data' => [
-                ['uuid', 'first_name', 'last_name', 'birth', 'email']
+                'contact',
+                'phones'
             ]
         ]);
+    }
+    /**
+     * @test
+     */
+    public function shouldNotShowContact() {
+        $this->withoutMiddleware();
+
+        $contact = factory(Contact::class)->make();
+        $contact['uuid'] = '1';
+        $response = $this->call('GET', "/api/contacts/$contact->uuid");
+
+        $response->assertStatus(422);
     }
     /**
      * @test
@@ -121,11 +141,16 @@ class ContactControllerTest extends TestCase
         $this->withoutMiddleware();
 
         $contact = factory(Contact::class, 1)->create()->get(0);
-
-        $data = ['last_name' => $this->faker->lastName];
+        $phones = factory(Phone::class, 3)->create()->toArray();
+        $data = ['phones' => [
+            [
+               'uuid' => $phones[0]['uuid'],
+               'area_code' => 67,
+            ]
+        ]];
 
         $response = $this->call('PUT', "/api/contacts/$contact->uuid", $data);
-
+        $phonesA = $contact->phones;
         $response->assertStatus(200);
 
         $response->assertJson([

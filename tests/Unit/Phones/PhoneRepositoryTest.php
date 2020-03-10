@@ -59,6 +59,17 @@ class PhoneRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function shouldFindPhoneByField() {
+        $phone = factory(Phone::class, 1)->create()->get(0);
+
+        $phoneFound = $this->repository->findBy('uuid', $phone->uuid)->first();
+
+        $this->assertEquals($phone->number, $phoneFound->number);
+    }
+
+    /**
+     * @test
+     */
     public function shouldDeletePhone() {
         $phone = factory(Phone::class, 1)->create()->get(0);
 

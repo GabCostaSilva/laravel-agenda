@@ -7,6 +7,7 @@ namespace Tests\Unit\Repositories\Contacts;
 use App\Models\Phone;
 use App\Repositories\ContactRepository;
 use App\Models\Contact;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 
@@ -121,5 +122,18 @@ class ContactRepositoryTest extends TestCase
         $deleted = $this->repository->delete($contact->uuid);
 
         $this->assertEquals($deleted, true);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFindMonthBirthdays() {
+        factory(Contact::class, 5)->create(['birth' => Carbon::now()->toDateString()]);
+
+        $currentMonth = Carbon::now()->month;
+
+        $birthdays = $this->repository->findBirthdays($currentMonth);
+
+        $this->assertTrue($birthdays->count() > 0);
     }
 }
