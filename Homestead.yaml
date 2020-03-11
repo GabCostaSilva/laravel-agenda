@@ -1,0 +1,26 @@
+ip: 192.168.10.10
+memory: 2048
+cpus: 2
+provider: virtualbox
+authorize: ~/.ssh/id_rsa.pub
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: /home/gabriel/Projects/laravel-agenda
+        to: /home/vagrant/code
+sites:
+    -
+        map: agenda.local
+        to: /home/vagrant/code/public
+databases:
+    - homestead
+features:
+    -
+        mariadb: false
+    -
+        ohmyzsh: false
+    -
+        webdriver: false
+name: laravel-agenda
+hostname: laravel-agenda

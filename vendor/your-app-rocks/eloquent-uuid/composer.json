@@ -1,0 +1,51 @@
+{
+    "name": "your-app-rocks/eloquent-uuid",
+    "type": "library",
+    "description": "Adds support for UUID generation automatically for Models Eloquents.",
+    "keywords": [
+        "YourApp.Rocks",
+        "uuid",
+        "eloquent-uuid",
+        "universal unique id"
+    ],
+    "homepage": "https://yourapp.rocks",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "João Roberto P. Borges",
+            "email": "joaorobertopb@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "ramsey/uuid": "^3.8"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.5|^4.0",
+        "phpunit/phpunit": "^7.0|^8.0",
+        "friendsofphp/php-cs-fixer": "^2.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "YourAppRocks\\EloquentUuid\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "YourAppRocks\\EloquentUuid\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "check-style": "php-cs-fixer fix --using-cache=no --diff --dry-run .",
+        "fix-style": "php-cs-fixer --using-cache=no fix ."
+    },
+    "scripts-descriptions": {
+        "test": "Run all tests.",
+        "check-style": "Run style checks (only dry run - no fixing!).",
+        "fix-style": "Run style checks and fix violations."
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
