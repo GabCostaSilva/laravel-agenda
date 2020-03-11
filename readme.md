@@ -15,8 +15,9 @@ CREATE DATABASE agenda
 No projeto
 ```bash
 composer install
+```
 ```bash
-```cp .env.example .env
+cp .env.example .env
 ```
 
 Alterar variáveis conforme a configuração desejada
