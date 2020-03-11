@@ -1,29 +1,43 @@
-#Sistema de Agenda em Laravel
+# Sistema de Agenda em Laravel
 
-###Requisitos
-	- PHP >= 7.2.5
-	- composer
-	- MySql
+### Requisitos
+- PHP >= 7.2.5
+- composer
+- MySQL
 
-###Startando o projeto
-	No MySql
-	```CREATE USER laravel```
-	```CREATE DATABASE agenda```
+### Startando o projeto
+No MySQL
+```bash
+CREATE USER laravel
+CREATE DATABASE agenda
+```
 
-	No projeto
-	```cp .env.example .env```
-	
-	Alterar variáveis conforme a configuração desejada
+No projeto
+```bash
+composer install
+```bash
+```cp .env.example .env
+```
 
-	Gerar chave
-	```php artisan key:generate```
+Alterar variáveis conforme a configuração desejada
 
-	Executar migrations
-	```php artisan migrate```
+Gerar chave
+```bash
+php artisan key:generate
+```
 
-	Popular base de dados
-	```php artisan db:seed```
+Executar migrations
+```bash
+php artisan migrate
+```
 
-	```composer dumpautoload```
-
-	```php artisan serve```
+Popular base de dados
+```bash
+php artisan db:seed
+```
+```bash
+composer dumpautoload
+```
+```bash
+php artisan serve
+```
