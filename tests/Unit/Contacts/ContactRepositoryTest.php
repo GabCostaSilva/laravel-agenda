@@ -74,11 +74,11 @@ class ContactRepositoryTest extends TestCase
      * @test
      */
     public function shouldFindContactsByFirstName() {
-        $contact = factory(Contact::class)->create();
-        factory(Phone::class)->create();
-        $contactFound = $this->repository->find($contact->first_name)->first();
+        $contact = factory(Contact::class, 10)->create();
+        factory(Phone::class, 12)->create();
+        $contactFound = $this->repository->find($contact->first()->first_name)->first();
 
-        $this->assertEquals($contact->first_name, $contactFound->first_name);
+        $this->assertEquals($contact->first()->first_name, $contactFound->first_name);
     }
     /**
      * @test
@@ -120,8 +120,9 @@ class ContactRepositoryTest extends TestCase
     public function shouldDeleteAContact() {
         $contact = factory(Contact::class, 1)->create()->get(0);
         $deleted = $this->repository->delete($contact->uuid);
-
+        $deletedFound = $this->repository->findOne($contact->id);
         $this->assertEquals($deleted, true);
+        $this->assertNull($deletedFound);
     }
 
     /**
